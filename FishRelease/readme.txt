@@ -1,6 +1,5 @@
-myenv - 実行したら出たもの
-static - 実行したら出たもの
-templates - indexとresultのページある
+static - アップロードされた画像を保存する場所
+templates - ページのある場所
 database - データベース作成用python
 app.py - アプリ
 requirements.txt - インストールしたらyolo使えるようになる

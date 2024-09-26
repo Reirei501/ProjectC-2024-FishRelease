@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>長さ測定アプリ</title>
+    <style>
+        #imageCanvas {
+            border: 1px solid black;
+            max-width: 100%;  /* キャンバスの幅を画面に合わせる */
+            height: auto;     /* 高さも自動で調整 */
+        }
+    </style>
+</head>
+<body>
+    <h1>参照物で魚の長さを測定</h1>
+
+    <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" id="imageUpload" accept="image/*">
+        <input type="submit" value="アップロード">
+    </form>
+
+    <br>
+
+    <canvas id="imageCanvas"></canvas>
+
+    <h3>参照物の実際の長さを入力:</h3>
+    <input type="number" id="actualLengthA" placeholder="参照物の実際の長さ (cm)">
+    <button id="calculateLength">長さを計算</button>
+
+    <h3>魚の実際の長さ:</h3>
+    <p id="result"></p>
+
+    <script>
+        let canvas = document.getElementById('imageCanvas');
+        let ctx = canvas.getContext('2d');
+        let img = new Image();
+        let isDrawing = false;
+        let startX, startY, endX, endY;
+        let lineA = {x1: 0, y1: 0, x2: 0, y2: 0};  // 物体Aの線座標
+        let lineB = {x1: 0, y1: 0, x2: 0, y2: 0};  // 物体Bの線座標
+        let drawingA = true;  // 最初は物体Aを描画
+
+        // 最大幅と高さを設定
+        const MAX_WIDTH = 800;
+        const MAX_HEIGHT = 600;
+
+        // 画像アップロード
+        document.getElementById('uploadForm').onsubmit = function(event) {
+            event.preventDefault();
+            let file = document.getElementById('imageUpload').files[0];
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                img.src = e.target.result;
+                img.onload = function() {
+                    // 画像をリサイズ
+                    let [newWidth, newHeight] = resizeImage(img.width, img.height);
+                    canvas.width = newWidth;
+                    canvas.height = newHeight;
+                    ctx.drawImage(img, 0, 0, newWidth, newHeight);
+                };
+            };
+            reader.readAsDataURL(file);
+        };
+
+        // 画像をリサイズする関数
+        function resizeImage(width, height) {
+            let aspectRatio = width / height;
+            if (width > height) {
+                // 幅が高い場合
+                width = Math.min(width, MAX_WIDTH);
+                height = width / aspectRatio;
+            } else {
+                // 高さが幅より大きい場合
+                height = Math.min(height, MAX_HEIGHT);
+                width = height * aspectRatio;
+            }
+            return [width, height];
+        }
+
+        // 物体AとBの線を描く
+        canvas.onmousedown = function(event) {
+            isDrawing = true;
+            startX = event.offsetX;
+            startY = event.offsetY;
+        };
+
+        canvas.onmouseup = function(event) {
+            if (!isDrawing) return;
+            isDrawing = false;
+            endX = event.offsetX;
+            endY = event.offsetY;
+            ctx.beginPath();
+            ctx.moveTo(startX, startY);
+            ctx.lineTo(endX, endY);
+            ctx.strokeStyle = drawingA ? "green" : "blue";
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            if (drawingA) {
+                lineA = {x1: startX, y1: startY, x2: endX, y2: endY};
+                drawingA = false;  // 次に物体Bを描画
+            } else {
+                lineB = {x1: startX, y1: startY, x2: endX, y2: endY};
+                drawingA = true;  // 物体Aに戻る
+            }
+        };
+
+        // 長さを計算する
+        document.getElementById('calculateLength').onclick = function() {
+            let actualLengthA = document.getElementById('actualLengthA').value;
+            if (!actualLengthA) {
+                alert("参照物の実際の長さを入力してください。");
+                return;
+            }
+
+            let data = {
+                lineA: lineA,
+                lineB: lineB,
+                actualLengthA: actualLengthA
+            };
+
+            fetch('/calculate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                document.getElementById('result').textContent = `魚の実際の長さ: ${result.actualLengthB} cm`;
+            });
+        };
+    </script>
+</body>
+</html>

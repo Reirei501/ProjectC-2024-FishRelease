@@ -6,24 +6,13 @@ from io import BytesIO
 import base64
 import os
 from ultralytics import YOLO
+import math
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # セッションのために必要な設定
 
 UPLOAD_FOLDER = 'static/uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-
-def get_fish_data(fish_type):
-    conn = sqlite3.connect('fish_rules.db')
-    cursor = conn.cursor()
-    cursor.execute('''
-    SELECT prefecture, release_length, release_rule
-    FROM fish_rules
-    WHERE fish_type = ?
-    ''', (fish_type,))
-    rows = cursor.fetchall()
-    conn.close()
-    return rows
 
 # グローバルにYOLOv8モデルを初期化
 MODEL_PATH = r'K:\FishRelease\best_v1.0.pt'
@@ -39,7 +28,7 @@ def process_image():
         return 'No image file', 400
     
     file = request.files['image']
-    npimg = np.fromfile(file, np.uint8)
+    npimg = np.frombuffer(file.read(), np.uint8)
     img = cv2.imdecode(npimg, cv2.IMREAD_COLOR)
 
     # YOLOv8を使った画像認識の処理
@@ -53,13 +42,13 @@ def process_image():
     fish_info = {}
     for label in labels:
         cursor.execute('''
-        SELECT fish_type, prefecture, release_length, release_rule
+        SELECT fish_type, fish_name, prefecture, release_length, release_rule
         FROM fish_rules
         WHERE fish_type = ?
         ''', (label,))
         rows = cursor.fetchall()
         if rows:
-            fish_info[label] = [{'fish_type': row[0], 'prefecture': row[1], 'release_length': row[2], 'release_rule': row[3]} for row in rows]
+            fish_info[label] = [{'fish_type': row[0], 'fish_name': row[1], 'prefecture': row[2], 'release_length': row[3], 'release_rule': row[4]} for row in rows]
 
     conn.close()
 
@@ -67,7 +56,7 @@ def process_image():
     img_filename = 'result_image.png'
     img_path = os.path.join(UPLOAD_FOLDER, img_filename)
     cv2.imwrite(img_path, processed_img)
-
+    
     # 結果をセッションに保存
     session['fish_info'] = fish_info
     session['image_filename'] = img_filename
@@ -108,6 +97,28 @@ def yolo_detect_objects(img):
             labels.append(class_name)
 
     return img, labels
+
+@app.route('/length_measurement')
+def length_measurement():
+    return render_template('length_measurement.html')  # 長さ測定ページ
+
+# 物体Aと物体Bの長さ計算API
+@app.route('/calculate', methods=['POST'])
+def calculate():
+    data = request.json
+    lineA = data['lineA']
+    lineB = data['lineB']
+    actual_length_A = float(data['actualLengthA'])
+
+    # ピクセル長を計算
+    pixel_length_A = math.sqrt((lineA['x2'] - lineA['x1']) ** 2 + (lineA['y2'] - lineA['y1']) ** 2)
+    pixel_length_B = math.sqrt((lineB['x2'] - lineB['x1']) ** 2 + (lineB['y2'] - lineB['y1']) ** 2)
+
+    # 補正係数 (実際の長さ/ピクセル長) から物体Bの実際の長さを計算
+    correction_factor = actual_length_A / pixel_length_A
+    actual_length_B = pixel_length_B * correction_factor
+
+    return jsonify({"actualLengthB": actual_length_B})
 
 if __name__ == "__main__":
     app.run(debug=True)

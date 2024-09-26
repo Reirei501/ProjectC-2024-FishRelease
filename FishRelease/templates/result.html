@@ -4,33 +4,64 @@
     <meta charset="UTF-8">
     <title>検出結果</title>
     <style>
-        body { font-family: Arial, sans-serif; }
-        #result { margin-top: 20px; }
-        .fish-info { margin-bottom: 20px; }
-        img { max-width: 100%; height: auto; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #ddd; padding: 8px; }
-        th { background-color: #f4f4f4; }
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        #result {
+            margin-top: 20px;
+        }
+
+        .fish-info {
+            margin-bottom: 20px;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
     </style>
 </head>
 <body>
     <h1>検出結果</h1>
     <div id="result">
-        <img src="{{ image_url }}" alt="Processed Image">
         {% for fish_type, info in fish_info.items() %}
-            <div class="fish-info">
-                <h3>{{ fish_type }}</h3>
-                <table>
-                    <tr><th>都道府県</th><th>リリース長</th><th>リリースルール</th></tr>
-                    {% for data in info %}
-                        <tr>
-                            <td>{{ data.prefecture }}</td>
-                            <td>{{ data.release_length }}</td>
-                            <td>{{ data.release_rule }}</td>
-                        </tr>
-                    {% endfor %}
-                </table>
-            </div>
+        <div class="fish-info">
+            <h3>{{ info[0]['fish_name'] }}</h3>
+            <img src="{{ image_url }}" alt="Processed Image">
+            <img src="{{ url_for('static', filename='images/' + info[0]['fish_type'] + '.png') }}" alt="{{ info[0]['fish_type'] }}" />
+            <h3>リリースルール</h3>
+            <table>
+                <tr>
+                    <th>都道府県</th>
+                    <th>リリース制限</th>
+                </tr>
+                {% for data in info %}
+                <tr>
+                    <td>{{ data['prefecture'] }}</td>
+                    <td>{{ data['release_length'] }} cm  {{ data['release_rule'] }}</td> <!-- リリース長とリリースルールをまとめて表示 -->
+                </tr>
+                {% endfor %}
+            </table>
+            <a href="{{ url_for('length_measurement') }}">
+                <button>長さ測定</button>
+            </a>
+        </div>
         {% endfor %}
     </div>
 </body>
