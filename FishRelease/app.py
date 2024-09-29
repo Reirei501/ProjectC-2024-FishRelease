@@ -9,7 +9,7 @@ from ultralytics import YOLO
 import math
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'  # セッションのために必要な設定
+app.secret_key = 'ProjectC-2024-E'
 
 UPLOAD_FOLDER = 'static/uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -117,6 +117,9 @@ def calculate():
     # 補正係数 (実際の長さ/ピクセル長) から物体Bの実際の長さを計算
     correction_factor = actual_length_A / pixel_length_A
     actual_length_B = pixel_length_B * correction_factor
+
+    # 小数点以下1桁に丸める
+    actual_length_B = round(actual_length_B, 1)
 
     return jsonify({"actualLengthB": actual_length_B})
 

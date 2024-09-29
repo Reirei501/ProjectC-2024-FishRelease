@@ -3,33 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>長さ測定アプリ</title>
-    <style>
-        #imageCanvas {
-            border: 1px solid black;
-            max-width: 100%;  /* キャンバスの幅を画面に合わせる */
-            height: auto;     /* 高さも自動で調整 */
-        }
-    </style>
+    <title>長さ測定</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/style.css">
 </head>
 <body>
-    <h1>参照物で魚の長さを測定</h1>
+    <header>
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">魚リリース判別</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{{ url_for('index') }}">魚認識</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{{ url_for('length_measurement') }}">長さ測定</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
 
-    <form id="uploadForm" enctype="multipart/form-data">
-        <input type="file" id="imageUpload" accept="image/*">
-        <input type="submit" value="アップロード">
-    </form>
+    <main>
+        <h1>参照物で魚の長さを測定</h1>
 
-    <br>
+        <form id="uploadForm" enctype="multipart/form-data">
+            <input type="file" id="imageUpload" accept="image/*">
+            <input type="submit" value="アップロード">
+        </form>
 
-    <canvas id="imageCanvas"></canvas>
+        <br>
 
-    <h3>参照物の実際の長さを入力:</h3>
-    <input type="number" id="actualLengthA" placeholder="参照物の実際の長さ (cm)">
-    <button id="calculateLength">長さを計算</button>
+        <canvas id="imageCanvas"></canvas>
 
-    <h3>魚の実際の長さ:</h3>
-    <p id="result"></p>
+        <h3>参照物の実際の長さを入力:</h3>
+        <input type="number" id="actualLengthA" placeholder="参照物の実際の長さ (cm)">
+        <button id="calculateLength">長さを計算</button>
+
+        <h3>魚の実際の長さ:</h3>
+        <p id="result"></p>
+    </main>
 
     <script>
         let canvas = document.getElementById('imageCanvas');
@@ -37,8 +55,8 @@
         let img = new Image();
         let isDrawing = false;
         let startX, startY, endX, endY;
-        let lineA = {x1: 0, y1: 0, x2: 0, y2: 0};  // 物体Aの線座標
-        let lineB = {x1: 0, y1: 0, x2: 0, y2: 0};  // 物体Bの線座標
+        let lineA = { x1: 0, y1: 0, x2: 0, y2: 0 };  // 物体Aの線座標
+        let lineB = { x1: 0, y1: 0, x2: 0, y2: 0 };  // 物体Bの線座標
         let drawingA = true;  // 最初は物体Aを描画
 
         // 最大幅と高さを設定
@@ -46,13 +64,13 @@
         const MAX_HEIGHT = 600;
 
         // 画像アップロード
-        document.getElementById('uploadForm').onsubmit = function(event) {
+        document.getElementById('uploadForm').onsubmit = function (event) {
             event.preventDefault();
             let file = document.getElementById('imageUpload').files[0];
             let reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = function (e) {
                 img.src = e.target.result;
-                img.onload = function() {
+                img.onload = function () {
                     // 画像をリサイズ
                     let [newWidth, newHeight] = resizeImage(img.width, img.height);
                     canvas.width = newWidth;
@@ -79,13 +97,13 @@
         }
 
         // 物体AとBの線を描く
-        canvas.onmousedown = function(event) {
+        canvas.onmousedown = function (event) {
             isDrawing = true;
             startX = event.offsetX;
             startY = event.offsetY;
         };
 
-        canvas.onmouseup = function(event) {
+        canvas.onmouseup = function (event) {
             if (!isDrawing) return;
             isDrawing = false;
             endX = event.offsetX;
@@ -98,16 +116,16 @@
             ctx.stroke();
 
             if (drawingA) {
-                lineA = {x1: startX, y1: startY, x2: endX, y2: endY};
+                lineA = { x1: startX, y1: startY, x2: endX, y2: endY };
                 drawingA = false;  // 次に物体Bを描画
             } else {
-                lineB = {x1: startX, y1: startY, x2: endX, y2: endY};
+                lineB = { x1: startX, y1: startY, x2: endX, y2: endY };
                 drawingA = true;  // 物体Aに戻る
             }
         };
 
         // 長さを計算する
-        document.getElementById('calculateLength').onclick = function() {
+        document.getElementById('calculateLength').onclick = function () {
             let actualLengthA = document.getElementById('actualLengthA').value;
             if (!actualLengthA) {
                 alert("参照物の実際の長さを入力してください。");
@@ -127,11 +145,12 @@
                 },
                 body: JSON.stringify(data)
             })
-            .then(response => response.json())
-            .then(result => {
-                document.getElementById('result').textContent = `魚の実際の長さ: ${result.actualLengthB} cm`;
-            });
+                .then(response => response.json())
+                .then(result => {
+                    document.getElementById('result').textContent = `魚の実際の長さ: ${result.actualLengthB} cm`;
+                });
         };
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
 </body>
 </html>
