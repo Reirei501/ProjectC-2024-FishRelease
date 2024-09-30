@@ -26,7 +26,7 @@ img {
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
+    text-align: center;
 }
 
 th, td {
@@ -36,6 +36,7 @@ th, td {
 
 th {
     background-color: #f4f4f4;
+    text-align: center;
 }
 
 form {
@@ -44,13 +45,63 @@ form {
 
 #imageCanvas {
     border: 1px solid black;
-    max-width: 100%; /* キャンバスの幅を画面に合わせる */
-    height: auto; /* 高さ自動調整 */
+    width: 800px; /* 固定幅に設定 */
+    height: 600px; /* 固定高さに設定 */
+    max-width: 100%; /* 画面幅に応じて最大幅を制限 */
 }
 
 h1 {
     text-align: center;
     color: white;
     text-shadow: 1px 1px 0 black, -1px -1px 0 black;
-    font-size: 2.5rem;
+    font-size: 2rem;
+}
+
+.card {
+    background-color: rgba(255, 255, 255, 0.8); /* 半透明の背景色 */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    padding: 20px;
+    width: 90%;
+}
+
+.card-header {
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
+    text-align: center;
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.card-wrapper img {
+    width: 48%; /* 2つの画像を横並びにするために幅を調整 */
+    margin-right: 2%;
+    border-radius: 5px;
+}
+
+.card-wrapper img:last-child {
+    margin-right: 0;
+}
+
+.card-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+form, canvas, h3, input, button {
+    display: block; /* ブロック要素として縦に配置 */
+    margin: 10px auto; /* 要素を中央に配置 */
+    width: 80%; /* 必要に応じて幅を設定 */
+}
+
+/* ボタンの幅調整 */
+button {
+    width: auto;
 }
