@@ -35,6 +35,12 @@
                 <h1>基準物で魚の長さを測定</h1>
             </div>
             <div class="card-body">
+                <h2>使い方：</h2>
+                <p>1.ファイルを選択してアップロードする</p>
+                <p>2.基準物の先端から末端までに線を引く</p>
+                <p>3.魚の先端から末端までに線を引く</p>
+                <p>4.基準物の実際の長さを入力する</p>
+                <p>5.「長さを計算」ボタンをクッリクする</p>
                 <form id="uploadForm" enctype="multipart/form-data">
                     <input type="file" id="imageUpload" accept="image/*">
                     <input type="submit" value="アップロード">
@@ -100,18 +106,22 @@
             return [width, height];
         }
 
-        canvas.onmousedown = function (event) {
+        function startDrawing(event) {
             isDrawing = true;
             const rect = canvas.getBoundingClientRect(); // キャンバスの位置を取得
-            startX = event.clientX - rect.left; // キャンバス内でのX座標
-            startY = event.clientY - rect.top;  // キャンバス内でのY座標
-        };
+            const x = event.clientX || event.touches[0].clientX; // X座標
+            const y = event.clientY || event.touches[0].clientY; // Y座標
+            startX = x - rect.left; // キャンバス内でのX座標
+            startY = y - rect.top;  // キャンバス内でのY座標
+        }
 
-        canvas.onmousemove = function (event) {
+        function drawLine(event) {
             if (!isDrawing) return; // 描画中でない場合は何もしない
             const rect = canvas.getBoundingClientRect(); // キャンバスの位置を取得
-            endX = event.clientX - rect.left; // キャンバス内でのX座標
-            endY = event.clientY - rect.top;  // キャンバス内でのY座標
+            const x = event.clientX || event.touches[0].clientX; // X座標
+            const y = event.clientY || event.touches[0].clientY; // Y座標
+            endX = x - rect.left; // キャンバス内でのX座標
+            endY = y - rect.top;  // キャンバス内でのY座標
 
             ctx.clearRect(0, 0, canvas.width, canvas.height); // 以前の描画を消去
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height); // 画像を再描画
@@ -123,14 +133,16 @@
             ctx.strokeStyle = drawingA ? "green" : "blue";
             ctx.lineWidth = 2;
             ctx.stroke();
-        };
+        }
 
-        canvas.onmouseup = function (event) {
+        function endDrawing(event) {
             if (!isDrawing) return;
             isDrawing = false;
             const rect = canvas.getBoundingClientRect(); // キャンバスの位置を取得
-            endX = event.clientX - rect.left; // キャンバス内でのX座標
-            endY = event.clientY - rect.top;  // キャンバス内でのY座標
+            const x = event.clientX || event.changedTouches[0].clientX; // X座標
+            const y = event.clientY || event.changedTouches[0].clientY; // Y座標
+            endX = x - rect.left; // キャンバス内でのX座標
+            endY = y - rect.top;  // キャンバス内でのY座標
 
             ctx.beginPath();
             ctx.moveTo(startX, startY);
@@ -146,8 +158,22 @@
                 lineB = { x1: startX, y1: startY, x2: endX, y2: endY };
                 drawingA = true;  // 物体Aに戻る
             }
-        };
+        }
 
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', drawLine);
+        canvas.addEventListener('mouseup', endDrawing);
+
+        // タッチイベントの追加
+        canvas.addEventListener('touchstart', function (event) {
+            event.preventDefault(); // スクロールを防ぐ
+            startDrawing(event);
+        });
+        canvas.addEventListener('touchmove', function (event) {
+            event.preventDefault(); // スクロールを防ぐ
+            drawLine(event);
+        });
+        canvas.addEventListener('touchend', endDrawing);
 
         // 長さを計算する
         document.getElementById('calculateLength').onclick = function () {
