@@ -124,4 +124,4 @@ def calculate():
     return jsonify({"actualLengthB": actual_length_B})
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)
