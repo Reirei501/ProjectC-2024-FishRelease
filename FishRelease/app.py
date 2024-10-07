@@ -15,7 +15,7 @@ UPLOAD_FOLDER = 'static/uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 # グローバルにYOLOv8モデルを初期化
-MODEL_PATH = r'K:\FishRelease\best_v1.0.pt'
+MODEL_PATH = 'best_v1.0.pt'
 model = YOLO(MODEL_PATH)
 
 @app.route('/')
