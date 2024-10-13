@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>リリース判定</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">魚リリース判別</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{{ url_for('index') }}">魚認識</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{{ url_for('length_measurement') }}">長さ測定</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{{ url_for('release') }}">リリース判定</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="card">
+            <div class="card-header">
+                <h1>リリース可否判定</h1>
+            </div>
+            <div class="card-body">
+                <form id="releaseForm" method="POST" action="{{ url_for('check_release') }}">
+                    <label for="fish_name">魚の名前:</label>
+                    <input type="text" id="fish_name" name="fish_name" value="{{ fish_name }}" required>
+                    <label for="fish_length">魚の長さ (cm):</label>
+                    <input type="number" id="fish_length" name="fish_length" value="{{ fish_length }}" step="0.1" required>
+                    <label for="prefecture">都道府県:</label>
+                    <select id="prefecture" name="prefecture" required>
+                        <option value="" disabled selected>選択してください</option>
+                        <option value="東京都">東京都</option>
+                        <option value="神奈川県">神奈川県</option>
+                        <option value="千葉県">千葉県</option>
+                        <option value="茨城県">茨城県</option>
+                        <option value="静岡県">静岡県</option>
+                        <option value="福井県">福井県</option>
+                        <option value="愛知県">愛知県</option>
+                        <option value="新潟県">新潟県</option>
+                    </select>
+
+                    <button type="submit">リリース判定</button>
+                </form>
+
+
+                <div id="resultMessage"></div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+    document.getElementById("releaseForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+
+        const fishName = document.getElementById("fish_name").value;
+        const fishLength = document.getElementById("fish_length").value;
+        const prefecture = document.getElementById("prefecture").value;
+
+        fetch("{{ url_for('check_release') }}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                fish_name: fishName,
+                fish_length: fishLength,
+                prefecture: prefecture
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            let message;
+            if (data.result === "release_required") {
+                message = "リリース必須。";
+            } else if (data.result === "release_not_required") {
+                message = "リリースしなくてもいい。";
+            } else {
+                message = "リリース規則がない。";
+            }
+            document.getElementById("resultMessage").innerText = message;
+        })
+        .catch(error => console.error('Error:', error));
+    });
+    </script>
+</body>
+</html>

@@ -1,1 +1,1 @@
-web: gunicorn app:app --log-file=- -t 180 --keep-alive 180
+web: gunicorn app:app --log-file=-

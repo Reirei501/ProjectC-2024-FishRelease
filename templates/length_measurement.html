@@ -23,6 +23,9 @@
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="{{ url_for('length_measurement') }}">長さ測定</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{{ url_for('release') }}">リリース判定</a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -42,7 +45,7 @@
                 <p>4.基準物の実際の長さを入力する</p>
                 <p>5.「長さを計算」ボタンをクッリクする</p>
                 <form id="uploadForm" enctype="multipart/form-data">
-                    <input type="file" id="imageUpload" accept="image/*">
+                    <input type="file" id="imageUpload" accept="image/*" capture="environment">
                     <input type="submit" value="アップロード">
                 </form>
 

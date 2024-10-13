@@ -96,6 +96,8 @@ def yolo_detect_objects(img):
             # ラベルの追加
             labels.append(class_name)
 
+    session['labels'] = labels
+
     return img, labels
 
 @app.route('/length_measurement')
@@ -121,7 +123,59 @@ def calculate():
     # 小数点以下1桁に丸める
     actual_length_B = round(actual_length_B, 1)
 
+    session['actual_length_B'] = actual_length_B
+
     return jsonify({"actualLengthB": actual_length_B})
 
-if __name__ == "__main__":
-    app.run(debug=False)
+def get_release_length(fish_type, prefecture):
+    try:
+        # with文を使ってデータベース接続を管理
+        with sqlite3.connect('fish_rules.db') as conn:
+            cursor = conn.cursor()
+            
+            # データベースからrelease_lengthを検索
+            cursor.execute("""
+                SELECT release_length FROM fish_rules 
+                WHERE fish_type = ? AND prefecture = ?
+            """, (fish_type, prefecture))
+            
+            result = cursor.fetchone()
+            
+            # 結果が存在する場合はrelease_lengthを返し、存在しない場合はNoneを返す
+            return result[0] if result else None
+            
+    except sqlite3.Error as e:
+        print(f"データベースエラー: {e}")
+        return None
+
+@app.route('/release/', methods=['GET', 'POST'])
+def release():
+    # labelsから最初の魚の名前を取得
+    fish_name = session.get('labels', [""])[0]  # 最初のラベルを使用
+    # actual_length_Bを取得
+    fish_length = session.get('actual_length_B', 0)
+
+    return render_template('release.html', fish_name=fish_name, fish_length=fish_length)
+
+# リリース判定のAPI
+@app.route('/check_release/', methods=['POST'])
+def check_release():
+    data = request.get_json()
+    fish_name = data['fish_name']  # フォームから送信された魚の名前
+    fish_length = float(data['fish_length'])  # フォームから送信された魚の長さ
+    prefecture = data['prefecture']  # フォームから選択された都道府県
+
+    # データベースからリリース基準の長さを取得
+    release_length = get_release_length(fish_name, prefecture)
+    
+    # 判定ロジック
+    if release_length is not None:
+        if fish_length <= release_length:
+            return jsonify({"result": "release_required"})
+        else:
+            return jsonify({"result": "release_not_required"})
+    else:
+        return jsonify({"result": "no_data"})
+
+if __name__ == '__main__':
+    app.run(debug=True)
