@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
@@ -39,9 +39,9 @@
             </div>
             <div class="card-body">
                 <form id="releaseForm" method="POST" action="{{ url_for('check_release') }}">
-                    <label for="fish_name">魚の名前:</label>
+                    <label for="fish_name">魚の名前</label>
                     <input type="text" id="fish_name" name="fish_name" value="{{ fish_name }}" required>
-                    <label for="fish_length">魚の長さ (cm):</label>
+                    <label for="fish_length">魚の長さ (cm)</label>
                     <input type="number" id="fish_length" name="fish_length" value="{{ fish_length }}" step="0.1" required>
                     <label for="prefecture">都道府県:</label>
                     <select id="prefecture" name="prefecture" required>
@@ -56,7 +56,7 @@
                         <option value="新潟県">新潟県</option>
                     </select>
 
-                    <button type="submit">リリース判定</button>
+                    <button type="submit" class="custom-submit-button2">リリース判定</button>
                 </form>
 
 
