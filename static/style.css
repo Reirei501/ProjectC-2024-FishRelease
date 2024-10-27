@@ -1,7 +1,11 @@
 @charset "UTF-8";
 
 body {
-    font-family: Arial, sans-serif;
+    .mochiy-pop-p-one-regular {
+        font-family: "Mochiy Pop P One", sans-serif;
+        font-weight: 400;
+        font-style: normal;
+      }      
     background-color: #708090;
 }
 
@@ -34,6 +38,7 @@ form {
     margin-top: 20px;
 }
 
+
 #imageCanvas {
     border: 1px solid black;
     width: 800px; /* 固定幅に設定 */
@@ -41,34 +46,172 @@ form {
     max-width: 100%; /* 画面幅に応じて最大幅を制限 */
 }
 
-h1 {
-    text-align: center;
-    color: white;
-    text-shadow: 1px 1px 0 black, -1px -1px 0 black;
-    font-size: 2rem;
+
+/* ファイル選択ボタンを非表示に */
+input[type="file"] {
+    display: none; /* ボタンを隠す */
 }
 
+.parent-container {
+    display: flex; /* フレックスボックスを使用 */
+    justify-content: center; /* 中央に配置 */
+    align-items: center; /* 垂直方向も中央に配置 */
+    gap: 10px; /* ボタン間のスペースを設定 */
+    margin: 20px 0; /* 上下のマージンを設定 */
+}
+
+.custom-file-upload {
+    width: 250px;
+    height: 250px;
+    border: none;
+    border-bottom: solid 2px #c0c0c0;
+    border-radius: 50%;
+    box-shadow: inset 15px 30px 40px rgba(255, 255, 255, 0.5), 0 3px 7px rgba(0, 0, 0, .2);
+    background-image: linear-gradient(#1579c0 0%, #0569b0 100%);
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 30px;
+    text-align: center;
+    display: flex; /* フレックスボックスとして表示 */
+    justify-content: center; /* テキストを中央に配置 */
+    align-items: center; /* テキストを中央に配置 */
+    padding: 30px;
+}
+
+/* ホバー時のスタイル */
+.custom-file-upload:hover {
+    background: linear-gradient(to right, #d2f6dd, #a0f0a8); /* ホバー時のグラデーション反転 */
+    color: white;
+    transform: scale(1.05); /* ホバー時に少し拡大 */
+}
+
+.custom-submit-button {
+    width: 250px;
+    height: 250px;
+    border: none;
+    border-bottom: solid 2px #c0c0c0;
+    border-radius: 50%;
+    box-shadow: inset 15px 30px 40px rgba(255, 255, 255, 0.5), 0 3px 7px rgba(0, 0, 0, .2);
+    background-image: linear-gradient(#f5b87f 0%, #e5a86f 100%);
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 30px;
+    display: flex; /* フレックスボックスとして表示 */
+    justify-content: center; /* テキストを中央に配置 */
+    align-items: center; /* テキストを中央に配置 */
+}
+
+/* ホバー時のアップロードボタンのスタイル */
+.custom-submit-button:hover {
+    background: linear-gradient(to right, #f1f9d0, #f4f48c); /* ホバー時のグラデーション反転 */
+    transform: scale(1.05); /* ホバー時に少し拡大 */
+}
+
+.custom-submit-button2{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 250px;
+    margin: 50 auto;
+    padding: .9em 2em;
+    border: none;
+    border-radius: 5px;
+    background-image: linear-gradient(0deg, #2589d0 0%, #2589d080 100%);
+    color: #fff;
+    font-weight: 600;
+    font-size: 1em;
+}
+
+#calculateLength{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 250px;
+    margin: 50 auto;
+    padding: .9em 2em;
+    border: none;
+    border-radius: 5px;
+    background-image: linear-gradient(0deg, #2589d0 0%, #2589d080 100%);
+    color: #fff;
+    font-weight: 600;
+    font-size: 1em;
+}
+h1{
+    display: inline-block;
+    position: relative;
+    padding: 0 2.5em;
+    color: #333333;
+    font-size: 70px;
+}
+
+h1::before,
+h1::after {
+    content: '';
+    display: inline-block;
+    position: absolute;
+    top: 50%;
+    width: 45px;
+    height: 3px;
+    background-color: #2589d0;
+}
+
+h1::before {
+    left: 0;
+}
+
+h1::after {
+    right: 0;
+}
+h2{
+    text-align: center;
+    color: rgba(18, 16, 16, 0.808);
+    font-size: 40px;
+    padding:10px .4em .2em;
+    border-bottom: 3px solid #2589d0;
+    background-color: #ffffff;
+    margin-top: 40px;
+}
+
+h3{
+    text-align: center;
+    color: rgba(114, 104, 104, 0.342);
+    font-size: 40px;
+    padding:10px .4em .2em;
+    border-bottom: 3px solid #2589d0;
+    background-color: #ffffff;
+    margin-top: 40px;
+}
+
+
+p{
+    text-align: center;
+    color: rgb(6, 6, 6);
+    font-size: 20px;
+    background-color: #ffffff;
+}
+/* Card全体のスタイル */
 .card {
-    background-color: rgba(255, 255, 255, 0.8); /* 半透明の背景色 */
+    border: 1px solid #ddd;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin: 20px auto;
     padding: 20px;
-    width: 90%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 20px 0;
+    background-color: #f9f9f9;
 }
 
 .card-header {
-    background-color: #007bff;
+    background-color: rgb(223, 244, 255);
     color: white;
-    padding: 10px;
+    padding: 40px;
     text-align: center;
 }
 
+
+/* Cardのボディ */
 .card-body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    padding: 40px 0;
 }
+
 
 .card-wrapper img {
     width: 48%; /* 2つの画像を横並びにするために幅を調整 */
