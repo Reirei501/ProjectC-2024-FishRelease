@@ -35,25 +35,29 @@
     <main>
         <div class="card">
             <div class="card-header">
-                <h1>基準物で魚の長さを測定</h1>
+                <h1>基準物で<br>魚の長さを測定</h1>
             </div>
             <div class="card-body">
-                <h2>使い方：</h2>
-                <p>1.ファイルを選択してアップロードする</p>
-                <p>2.基準物の先端から末端までに線を引く</p>
-                <p>3.魚の先端から末端までに線を引く</p>
-                <p>4.基準物の実際の長さを入力する</p>
-                <p>5.「長さを計算」ボタンをクッリクする</p>
+                <h2>使い方</h2>
+                <p>1.写真撮影ボタンを選択する</p>
+                <p>2.アップロードボタンを選択する</p>
+                <p>3.基準物の先端から末端までに線を引く</p>
+                <p>4.魚の先端から末端までに線を引く</p>
+                <p>5.基準物の実際の長さを入力する</p>
+                <p>6.「長さを計算」ボタンをクッリクする</p>
                 <form id="uploadForm" enctype="multipart/form-data">
+                    <div class="parent-container">
+                        <label for="imageUpload" class="custom-file-upload">写真撮影</label>
+                     </div>  
                     <input type="file" id="imageUpload" accept="image/*" capture="environment">
-                    <input type="submit" value="アップロード">
+                    <button type="submit" class="custom-submit-button">アップロード</button>
                 </form>
 
                 <br>
 
                 <canvas id="imageCanvas"></canvas>
 
-                <h3>基準物の実際の長さを入力:</h3>
+                <h3>基準物の実際の長さを入力</h3> 
                 <input type="number" id="actualLengthA" placeholder="基準物の実際の長さ (cm)">
                 <button id="calculateLength">長さを計算</button>
 
