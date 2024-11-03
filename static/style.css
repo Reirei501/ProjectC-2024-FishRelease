@@ -112,7 +112,6 @@ input[type="file"] {
     justify-content: center;
     align-items: center;
     width: 250px;
-    height: 70px;
     margin: 50 auto;
     padding: .9em 2em;
     border: none;
@@ -175,8 +174,8 @@ h2{
 
 h3{
     text-align: center;
-    color: rgba(29, 26, 26, 0.865);
-    font-size: 30px;
+    color: rgba(114, 104, 104, 0.342);
+    font-size: 40px;
     padding:10px .4em .2em;
     border-bottom: 3px solid #2589d0;
     background-color: #ffffff;
@@ -190,31 +189,6 @@ p{
     font-size: 20px;
     background-color: #ffffff;
 }
-
-.fish_name{
-    text-align: center;
-    color: rgba(29, 26, 26, 0.865);
-    font-size: 35px;
-    padding:10px .4em .2em;
-    border-bottom: 3px solid #2589d0;
-    background-color: #ffffff;
-}
-
-.fish_length{
-    text-align: center;
-    color: rgba(29, 26, 26, 0.865);
-    font-size: 35px;
-    padding:10px .4em .2em;
-    border-bottom: 3px solid #2589d0;
-    background-color: #ffffff;
-    margin-top: 40px;
-}
-
-.prefecture{
-    font-size: 20px;
-    margin-bottom: 20px;
-}
-
 /* Card全体のスタイル */
 .card {
     border: 1px solid #ddd;
