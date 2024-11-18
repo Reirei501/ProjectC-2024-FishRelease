@@ -3,9 +3,9 @@ templates - ページのある場所
 database - データベース作成用python
 app.py - アプリ
 requirements.txt - インストールすべきものが書いてある
-best_v1.0.pt - 自作認識モデル。今は12種類の魚が認識できる
+best_v2.0.pt - 自作認識モデル。46種類の魚が認識できる
 fish_rules.db - 作成したデータベース
-yolov8s.pt - 実行したら出たもの。app.pyで他のモデルに変更可能
+yolov8s.pt - 使ってるyoloモデル。app.pyで他のモデルに変更可能
 
 
 実行する方法：
