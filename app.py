@@ -78,27 +78,27 @@ def uploaded_file(filename):
 
 def yolo_detect_objects(img):
     results = model(img)
-    labels = []
+    detections = []  # ラベルと信頼度を保存するリスト
 
     for result in results:
         boxes = result.boxes.xyxy
         confidences = result.boxes.conf
         class_ids = result.boxes.cls
 
-        for box, class_id in zip(boxes, class_ids):
+        for box, confidence, class_id in zip(boxes, confidences, class_ids):
             x1, y1, x2, y2 = map(int, box)
             color = [int(c) for c in np.random.randint(0, 255, size=(3,))]
             cv2.rectangle(img, (x1, y1), (x2, y2), color, 2)
             class_name = model.names[int(class_id)]
-            text = f"{class_name}"
+            text = f"{class_name} ({confidence:.2f})"
             cv2.putText(img, text, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
 
-            # ラベルの追加
-            labels.append(class_name)
+            # ラベルと信頼度を追加
+            detections.append((class_name, float(confidence)))
 
-    session['labels'] = labels
+    session['detections'] = detections  # セッションに全ての検出結果を保存
 
-    return img, labels
+    return img, [label for label, _ in detections]
 
 @app.route('/length_measurement')
 def length_measurement():

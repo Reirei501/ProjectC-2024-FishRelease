@@ -23,13 +23,13 @@
                     <div class="offcanvas-body">
                         <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                             <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="{{ url_for('index') }}">魚認識</a>
+                                <a class="nav-link active fs-5 btn btn-primary mb-2" aria-current="page" href="{{ url_for('index') }}">魚認識</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="{{ url_for('length_measurement') }}">長さ測定</a>
+                                <a class="nav-link active fs-5 btn btn-primary mb-2" aria-current="page" href="{{ url_for('length_measurement') }}">長さ測定</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="{{ url_for('release') }}">リリース判定</a>
+                                <a class="nav-link active fs-5 btn btn-primary mb-2" aria-current="page" href="{{ url_for('release') }}">リリース判定</a>
                             </li>
                         </ul>
                     </div>
@@ -39,20 +39,49 @@
     </header>
 
     <main>
-
-        {% for fish_type, info in fish_info.items() %}
-        <!-- カードを中央寄せ -->
         <div class="card">
             <div class="card-header">
-                <h1>検出結果</h1> <!-- 検出結果をカード内に移動 -->
+                <h1>検出結果</h1>
             </div>
+            <!-- 検出された魚のリストと信頼度を表示 -->
             <div class="card-body">
-                <h3 class="card-title">{{ info[0]['fish_name'] }}</h3>
-                <div class="card-wrapper">
-                    <img src="{{ image_url }}" alt="Processed Image">
-                    <img src="{{ url_for('static', filename='images/' + info[0]['fish_type'] + '.png') }}" alt="{{ info[0]['fish_type'] }}" />
+                {% if session['detections'] %}
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>魚種</th>
+                            <th>信頼度</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for label, confidence in session['detections'] %}
+                        <tr>
+                            <td>{{ label }}</td>
+                            <td>{{ confidence | round(2) }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <!-- 検出結果がなかった場合 -->
+                <p class="text-center text-danger">検出できませんでした</p>
+                {% endif %}
+                <div class="d-flex justify-content-center align-items-center mt-3 mb-3">
+                    <img src="{{ image_url }}" alt="Processed Image" class="img-fluid" style="max-width: 70%; margin-right: 15px;">
+                    <p class="vertical-text mb-0">結果画像</p>
                 </div>
-                <h3 class="mt-4">リリースルール</h3>
+                <!-- 各魚の詳細情報をカード形式で表示 -->
+                {% for fish_type, info in fish_info.items() %}
+                <div class="card-header bg-primary text-white">
+                    {{ info[0]['fish_name'] }} の詳細
+                </div>
+                <div class="d-flex justify-content-center align-items-center mt-3 mb-3">
+                    <img src="{{ url_for('static', filename='images/' + info[0]['fish_type'] + '.jpg') }}"
+                         alt="{{ info[0]['fish_type'] }}"
+                         class="img-fluid" style="max-width: 70%; margin-right: 15px;">
+                    <p class="vertical-text mb-0">見本画像</p>
+                </div>
+                <h3>リリースルール</h3>
                 <table class="table">
                     <thead>
                         <tr>
@@ -70,9 +99,10 @@
                     </tbody>
                 </table>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </main>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
 </body>

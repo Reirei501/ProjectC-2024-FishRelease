@@ -178,7 +178,7 @@ h2{
 h3 {
     text-align: center;
     color: #191970;
-    font-size: 40px;
+    font-size: 20px;
     padding: 10px .4em .2em;
     border-bottom: 3px solid #2589d0;
     background-color: #ffffff;
@@ -213,7 +213,7 @@ p{
 
 /* Cardのボディ */
 .card-body {
-    padding: 40px 0;
+    padding: 20px 0;
 }
 
 
@@ -237,6 +237,13 @@ form, canvas, h3, input, button {
     display: block; /* ブロック要素として縦に配置 */
     margin: 10px auto; /* 要素を中央に配置 */
     width: 80%; /* 必要に応じて幅を設定 */
+}
+
+.vertical-text {
+    writing-mode: vertical-rl; /* 縦書き */
+    text-orientation: upright; /* 文字の方向を正立にする */
+    margin-left: 5px; /* 写真との間に余白を追加 */
+    font-size: 17px; /* 文字サイズを調整 */
 }
 
 /* ボタンの幅調整 */
