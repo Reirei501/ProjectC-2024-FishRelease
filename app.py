@@ -60,6 +60,11 @@ def process_image():
     # 結果をセッションに保存
     session['fish_info'] = fish_info
     session['image_filename'] = img_filename
+    session['labels'] = labels
+
+    # 最初のラベル（魚の名前）をセッションに保存
+    if labels:
+        session['fish_name'] = labels[0]
 
     # 結果表示ページにリダイレクト
     return redirect(url_for('result'))
