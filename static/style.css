@@ -34,33 +34,30 @@ form {
     margin-top: 20px;
 }
 
-
 #imageCanvas {
     border: 1px solid black;
-    width: 800px; /* 固定幅に設定 */
-    height: 600px; /* 固定高さに設定 */
-    max-width: 100%; /* 画面幅に応じて最大幅を制限 */
+    width: 800px;
+    height: 600px;
+    max-width: 100%;
 }
 
-
-/* ファイル選択ボタンを非表示に */
 input[type="file"] {
-    display: none; /* ボタンを隠す */
+    display: none;
 }
 
 .parent-container {
-    display: flex; /* フレックスボックスを使用 */
-    justify-content: center; /* 中央に配置 */
-    align-items: center; /* 垂直方向も中央に配置 */
-    gap: 10px; /* ボタン間のスペースを設定 */
-    margin: 20px 0; /* 上下のマージンを設定 */
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 20px 0; 
 }
 
 .navbar-toggler {
     position: absolute;
-    right: 10px; /* 右端に寄せる */
-    top: 50%; /* 垂直中央に配置 */
-    transform: translateY(-50%); /* 垂直中央調整 */
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .custom-file-upload {
@@ -75,17 +72,16 @@ input[type="file"] {
     font-weight: 600;
     font-size: 30px;
     text-align: center;
-    display: flex; /* フレックスボックスとして表示 */
-    justify-content: center; /* テキストを中央に配置 */
-    align-items: center; /* テキストを中央に配置 */
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
     padding: 30px;
 }
 
-/* ホバー時のスタイル */
 .custom-file-upload:hover {
-    background: linear-gradient(to right, #d2f6dd, #a0f0a8); /* ホバー時のグラデーション反転 */
+    background: linear-gradient(to right, #d2f6dd, #a0f0a8);
     color: white;
-    transform: scale(1.05); /* ホバー時に少し拡大 */
+    transform: scale(1.05);
 }
 
 .custom-submit-button {
@@ -99,23 +95,23 @@ input[type="file"] {
     color: #ffffff;
     font-weight: 600;
     font-size: 30px;
-    display: flex; /* フレックスボックスとして表示 */
-    justify-content: center; /* テキストを中央に配置 */
-    align-items: center; /* テキストを中央に配置 */
+    display: flex;
+    justify-content: center;
+    align-items: center; 
 }
 
-/* ホバー時のアップロードボタンのスタイル */
 .custom-submit-button:hover {
-    background: linear-gradient(to right, #f1f9d0, #f4f48c); /* ホバー時のグラデーション反転 */
-    transform: scale(1.05); /* ホバー時に少し拡大 */
+    background: linear-gradient(to right, #f1f9d0, #f4f48c);
+    transform: scale(1.05);
 }
 
-.custom-submit-button2{
+.custom-submit-button2 {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 250px;
     margin: auto;
+    margin-top: 10px;
     padding: .9em 2em;
     border: none;
     border-radius: 5px;
@@ -193,7 +189,6 @@ p{
     background-color: #ffffff;
 }
 
-/* Card全体のスタイル */
 .card {
     border: 1px solid #ddd;
     border-radius: 10px;
@@ -211,14 +206,13 @@ p{
 }
 
 
-/* Cardのボディ */
 .card-body {
     padding: 20px 0;
 }
 
 
 .card-wrapper img {
-    width: 48%; /* 2つの画像を横並びにするために幅を調整 */
+    width: 48%;
     margin-right: 2%;
     border-radius: 5px;
 }
@@ -234,19 +228,22 @@ p{
 }
 
 form, canvas, h3, input, button {
-    display: block; /* ブロック要素として縦に配置 */
-    margin: 10px auto; /* 要素を中央に配置 */
-    width: 80%; /* 必要に応じて幅を設定 */
+    display: block;
+    margin: 10px auto;
+    width: 80%;
+}
+
+form#releaseForm > * {
+    margin-bottom: 0.5em;
 }
 
 .vertical-text {
-    writing-mode: vertical-rl; /* 縦書き */
-    text-orientation: upright; /* 文字の方向を正立にする */
-    margin-left: 5px; /* 写真との間に余白を追加 */
-    font-size: 17px; /* 文字サイズを調整 */
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    margin-left: 5px;
+    font-size: 17px;
 }
 
-/* ボタンの幅調整 */
 button {
     width: auto;
 }
@@ -267,6 +264,13 @@ button {
         box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.4);
 }
 
+#prefecture {
+    width: 200px;
+    margin-bottom: 10px;
+}
+
 div#resultMessage {
-    font-size: 24px;
+    font-size: 34px;
+    font-weight: bold;
+    background: #CCFFFF;
 }

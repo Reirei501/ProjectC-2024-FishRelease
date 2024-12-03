@@ -16,7 +16,6 @@ def create_db():
     )
     ''')
 
-    # データの挿入例
     fish_data = [
         ('ainame', 'アイナメ', '岩手県', 25, '未満'),
         ('ainame', 'アイナメ', '宮城県', 25, '未満'),
@@ -188,7 +187,6 @@ def create_db():
         ('unagi', 'ウナギ', '神奈川県', 24, '以下'),
         ('unagi', 'ウナギ', '茨城県', 23, '以下'),
         ('usumebaru', 'ウスメバル', '新潟県', 12, '未満'),
-        # 他のデータも追加
     ]
     cursor.executemany('''
     INSERT INTO fish_rules (fish_type, fish_name, prefecture, release_length, release_rule)

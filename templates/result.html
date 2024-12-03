@@ -43,7 +43,6 @@
             <div class="card-header">
                 <h1>検出結果</h1>
             </div>
-            <!-- 検出された魚のリストと信頼度を表示 -->
             <div class="card-body">
                 {% if session['detections'] %}
                 <table class="table table-striped">
@@ -63,14 +62,12 @@
                     </tbody>
                 </table>
                 {% else %}
-                <!-- 検出結果がなかった場合 -->
                 <p class="text-center text-danger">検出できませんでした</p>
                 {% endif %}
                 <div class="d-flex justify-content-center align-items-center mt-3 mb-3">
                     <img src="{{ image_url }}" alt="Processed Image" class="img-fluid" style="max-width: 70%; margin-right: 15px;">
                     <p class="vertical-text mb-0">結果画像</p>
                 </div>
-                <!-- 各魚の詳細情報をカード形式で表示 -->
                 {% for fish_type, info in fish_info.items() %}
                 <div class="card-header bg-primary text-white">
                     {{ info[0]['fish_name'] }} の詳細

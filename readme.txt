@@ -1,5 +1,5 @@
 static - アップロードされた画像を保存する場所
-templates - ページのある場所
+templates - htmlのある場所
 database - データベース作成用python
 app.py - アプリ
 requirements.txt - インストールすべきものが書いてある
@@ -14,5 +14,6 @@ cmdを開いて以下のコードを実行する：
 cd パス（アプリのあるフォルダ）
 pip install -r requirements.txt
 python app.py
-ローカルホスト(http://127.0.0.1:5000/)にアクセスする
+ローカルホストにアクセスする→
+http://127.0.0.1:5000/
 

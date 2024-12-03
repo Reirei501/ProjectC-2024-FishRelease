@@ -14,7 +14,7 @@ app.secret_key = 'ProjectC-2024-E'
 UPLOAD_FOLDER = 'static/uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-# グローバルにYOLOv8モデルを初期化
+# YOLOv8モデルを初期化
 MODEL_PATH = 'best_v2.0.pt'
 model = YOLO(MODEL_PATH)
 
@@ -38,7 +38,6 @@ def process_image():
     conn = sqlite3.connect('fish_rules.db')
     cursor = conn.cursor()
 
-    # ラベルごとに情報を取得
     fish_info = {}
     for label in labels:
         cursor.execute('''
@@ -62,7 +61,7 @@ def process_image():
     session['image_filename'] = img_filename
     session['labels'] = labels
 
-    # 最初のラベル（魚の名前）をセッションに保存
+    # 最初のラベルをセッションに保存
     if labels:
         session['fish_name'] = labels[0]
 
@@ -97,8 +96,6 @@ def yolo_detect_objects(img):
             class_name = model.names[int(class_id)]
             text = f"{class_name} ({confidence:.2f})"
             cv2.putText(img, text, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
-
-            # ラベルと信頼度を追加
             detections.append((class_name, float(confidence)))
 
     session['detections'] = detections  # セッションに全ての検出結果を保存
@@ -107,9 +104,8 @@ def yolo_detect_objects(img):
 
 @app.route('/length_measurement')
 def length_measurement():
-    return render_template('length_measurement.html')  # 長さ測定ページ
+    return render_template('length_measurement.html')
 
-# 物体Aと物体Bの長さ計算API
 @app.route('/calculate', methods=['POST'])
 def calculate():
     data = request.json
@@ -117,11 +113,9 @@ def calculate():
     lineB = data['lineB']
     actual_length_A = float(data['actualLengthA'])
 
-    # ピクセル長を計算
     pixel_length_A = math.sqrt((lineA['x2'] - lineA['x1']) ** 2 + (lineA['y2'] - lineA['y1']) ** 2)
     pixel_length_B = math.sqrt((lineB['x2'] - lineB['x1']) ** 2 + (lineB['y2'] - lineB['y1']) ** 2)
 
-    # 補正係数 (実際の長さ/ピクセル長) から物体Bの実際の長さを計算
     correction_factor = actual_length_A / pixel_length_A
     actual_length_B = pixel_length_B * correction_factor
 
@@ -134,7 +128,6 @@ def calculate():
 
 def get_release_length(fish_type, prefecture):
     try:
-        # with文を使ってデータベース接続を管理
         with sqlite3.connect('fish_rules.db') as conn:
             cursor = conn.cursor()
             
@@ -146,7 +139,6 @@ def get_release_length(fish_type, prefecture):
             
             result = cursor.fetchone()
             
-            # 結果が存在する場合はrelease_lengthを返し、存在しない場合はNoneを返す
             return result[0] if result else None
             
     except sqlite3.Error as e:
@@ -155,14 +147,11 @@ def get_release_length(fish_type, prefecture):
 
 @app.route('/release/', methods=['GET', 'POST'])
 def release():
-    # labelsから最初の魚の名前を取得
-    fish_name = session.get('labels', [""])[0]  # 最初のラベルを使用
-    # actual_length_Bを取得
+    fish_name = session.get('labels', [""])[0]
     fish_length = session.get('actual_length_B', 0)
 
     return render_template('release.html', fish_name=fish_name, fish_length=fish_length)
 
-# リリース判定のAPI
 @app.route('/check_release/', methods=['POST'])
 def check_release():
     data = request.get_json()
@@ -173,7 +162,6 @@ def check_release():
     # データベースからリリース基準の長さを取得
     release_length = get_release_length(fish_name, prefecture)
     
-    # 判定ロジック
     if release_length is not None:
         if fish_length <= release_length:
             return jsonify({"result": "release_required"})
@@ -184,3 +172,4 @@ def check_release():
 
 if __name__ == '__main__':
     app.run(debug=True)
+    #app.run(host='0.0.0.0', port=5000)
