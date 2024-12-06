@@ -4,6 +4,7 @@ database - データベース作成用python
 app.py - アプリ
 requirements.txt - インストールすべきものが書いてある
 best_v2.0.pt - 自作認識モデル。46種類の魚が認識できる
+best_v3.0.pt - 自作認識モデル。毎種類40枚→80枚
 fish_rules.db - 作成したデータベース
 yolov8s.pt - 使ってるyoloモデル。app.pyで他のモデルに変更可能
 

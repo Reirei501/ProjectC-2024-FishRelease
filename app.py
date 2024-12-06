@@ -15,7 +15,7 @@ UPLOAD_FOLDER = 'static/uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 # YOLOv8モデルを初期化
-MODEL_PATH = 'best_v2.0.pt'
+MODEL_PATH = 'best_v3.0.pt'
 model = YOLO(MODEL_PATH)
 
 @app.route('/')
@@ -171,5 +171,5 @@ def check_release():
         return jsonify({"result": "no_data"})
 
 if __name__ == '__main__':
-    app.run(debug=True)
-    #app.run(host='0.0.0.0', port=5000)
+    #app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000)
